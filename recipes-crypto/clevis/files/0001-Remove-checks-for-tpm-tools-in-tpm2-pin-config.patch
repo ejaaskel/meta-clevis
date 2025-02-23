@@ -1,0 +1,43 @@
+From add991d57b17ffc1fef0ab039da9cbd1d5697781 Mon Sep 17 00:00:00 2001
+From: ejaaskel <esa.jaaskela@suomi24.fi>
+Date: Fri, 21 Feb 2025 17:17:48 +0000
+Subject: [PATCH] Remove checks for tpm tools in tpm2 pin config
+
+Yocto does not provide the binaries that are compiled for the target
+architecture if the recipe depends on them. tpm2-tools does not have a
+native recipe either that could be used for a "dummy" check. Therefore,
+remove the checks to allow cross-compilation.
+---
+ src/pins/tpm2/meson.build | 19 +++----------------
+ 1 file changed, 3 insertions(+), 16 deletions(-)
+
+diff --git a/src/pins/tpm2/meson.build b/src/pins/tpm2/meson.build
+index ec01dcf..675b35c 100644
+--- a/src/pins/tpm2/meson.build
++++ b/src/pins/tpm2/meson.build
+@@ -1,19 +1,6 @@
+-cmds = ['tpm2_createprimary', ['tpm2_pcrread', 'tpm2_pcrlist'],
+-        'tpm2_createpolicy', 'tpm2_create', 'tpm2_flushcontext', 'tpm2_load',
+-        'tpm2_unseal']
+-
+-all = true
+-foreach cmd : cmds
+-  all = all and find_program(cmd, required: false).found()
+-endforeach
+-
+-if all
+-  bins += join_paths(meson.current_source_dir(), 'clevis-decrypt-tpm2')
+-  bins += join_paths(meson.current_source_dir(), 'clevis-encrypt-tpm2')
+-  mans += join_paths(meson.current_source_dir(), 'clevis-encrypt-tpm2.1')
+-else
+-  warning('Will not install tpm2 pin due to missing dependencies!')
+-endif
++bins += join_paths(meson.current_source_dir(), 'clevis-decrypt-tpm2')
++bins += join_paths(meson.current_source_dir(), 'clevis-encrypt-tpm2')
++mans += join_paths(meson.current_source_dir(), 'clevis-encrypt-tpm2.1')
+ 
+ # Tests.
+ env = environment()
+-- 
+2.34.1
+

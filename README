@@ -1,0 +1,5 @@
+# meta-clevis
+
+This meta-layer adds recipe for Clevis automated decryption framework. In addition, there are recipes for Clevis dependencies that don't have a recipe already, Jose and luksmeta.
+
+Clevis is a bit difficult to cross-compile. The build process checks for existence of some binaries, which does not make much sense in OpenEmbedded build system, because the sysroot does not contain the cross-compiled binaries. Therefore, I had to patch out some of these checks to get TPM2 pin working. The build completes, but there are some features which are not enabled. You can check the configuration log for these features, and patch out the binary checks as needed to compile in features.
